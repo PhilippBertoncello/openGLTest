@@ -18,8 +18,13 @@ GLuint vao = 0;
 
 GLuint positionID;
 GLuint colorID;
+GLuint windowSizeID;
 
 GLuint shaderProgramID;
+
+
+GLuint windowWidth;
+GLuint windowHeight;
 
 int main(int argc, char** argv) {
 	initGLUT(argc, argv, "title", 480, 360);
@@ -28,6 +33,10 @@ int main(int argc, char** argv) {
 }
 
 void onInitEnd() {
+	//Get Glut variables
+	windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
 	//Make VAO
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -53,6 +62,7 @@ void onInitEnd() {
 	//get location of variables
 	positionID = glGetAttribLocation(shaderProgramID, "s_vPosition");
 	colorID = glGetAttribLocation(shaderProgramID, "s_vColor");
+	windowSizeID = glGetUniformLocation(shaderProgramID, "windowSize");
 
 	//set attributes to read from this buffer
 	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -61,6 +71,9 @@ void onInitEnd() {
 	//use the shader program
 	glUseProgram(shaderProgramID);
 	
+	//set uniform variables
+	glUniform2f(windowSizeID, windowWidth, windowHeight);
+
 	//enable the attribute arrays
 	glEnableVertexAttribArray(positionID);
 	glEnableVertexAttribArray(colorID);

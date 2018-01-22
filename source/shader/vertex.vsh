@@ -1,15 +1,11 @@
 #version 130
 
-attribute vec4 s_vPosition;
-attribute vec4 s_vColor;
+attribute vec4 in_position;
+attribute vec4 in_color;
 
-
-varying vec4 color;
-varying vec4 verColor[3];
-varying vec4 verPosition[3];
-
+flat out vec4 var_color;
 
 void main() {
-	gl_Position = s_vPosition;
-	color = s_vColor;
+	gl_Position = in_position;
+	var_color = in_color;
 }

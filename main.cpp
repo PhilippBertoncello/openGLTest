@@ -60,9 +60,9 @@ void onInitEnd() {
 	shaderProgramID = makeShaderProgram(vertexShaderID, fragmentShaderID);
 
 	//get location of variables
-	positionID = glGetAttribLocation(shaderProgramID, "s_vPosition");
-	colorID = glGetAttribLocation(shaderProgramID, "s_vColor");
-	windowSizeID = glGetUniformLocation(shaderProgramID, "windowSize");
+	positionID = glGetAttribLocation(shaderProgramID, "in_position");
+	colorID = glGetAttribLocation(shaderProgramID, "in_color");
+	windowSizeID = glGetUniformLocation(shaderProgramID, "uni_windowSize");
 
 	//set attributes to read from this buffer
 	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -77,7 +77,6 @@ void onInitEnd() {
 	//enable the attribute arrays
 	glEnableVertexAttribArray(positionID);
 	glEnableVertexAttribArray(colorID);
-
 } 
 
 void onDraw() {

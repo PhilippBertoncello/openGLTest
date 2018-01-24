@@ -21,6 +21,8 @@ GLuint colorID;
 
 GLuint shaderProgramID;
 
+GLuint uni_transformationMatrixID;
+
 GLuint windowWidth;
 GLuint windowHeight;
 
@@ -61,6 +63,7 @@ void onInitEnd() {
 	//get location of variables
 	positionID = glGetAttribLocation(shaderProgramID, "in_position");
 	colorID = glGetAttribLocation(shaderProgramID, "in_color");
+	uni_transformationMatrixID = glGetUniformLocation(shaderProgramID, "uni_transformationMatrix");
 
 	//set attributes to read from this buffer
 	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, 0, 0);

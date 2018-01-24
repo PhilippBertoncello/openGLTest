@@ -13,6 +13,13 @@ GLfloat colorSource[] = {
 	0.0f,0.0f,1.0f,1.0f
 };
 
+GLfloat cam_translate_data[16] = {
+	1,0,0,0,
+	0,1,0,0,
+	0,0,1,0,
+	0,0,0,1
+};
+
 GLuint vbo;
 GLuint vao = 0;
 
@@ -21,10 +28,11 @@ GLuint colorID;
 
 GLuint shaderProgramID;
 
-GLuint uni_transformationMatrixID;
+GLuint cam_translateID;
 
 GLuint windowWidth;
 GLuint windowHeight;
+
 
 int main(int argc, char** argv) {
 	initGLUT(argc, argv, "title", 480, 360);
@@ -33,7 +41,6 @@ int main(int argc, char** argv) {
 }
 
 void onInitEnd() {
-
 	//Get Glut variables
 	windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
@@ -63,7 +70,7 @@ void onInitEnd() {
 	//get location of variables
 	positionID = glGetAttribLocation(shaderProgramID, "in_position");
 	colorID = glGetAttribLocation(shaderProgramID, "in_color");
-	uni_transformationMatrixID = glGetUniformLocation(shaderProgramID, "uni_transformationMatrix");
+	cam_translateID = glGetUniformLocation(shaderProgramID, "cam_translate");
 
 	//set attributes to read from this buffer
 	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -73,7 +80,7 @@ void onInitEnd() {
 	glUseProgram(shaderProgramID);
 	
 	//set uniform variables
-
+	glUniformMatrix4fv(cam_translateID, 1, GL_TRUE, cam_translate_data);
 
 	//Disable face culling
 	glDisable(GL_CULL_FACE);
@@ -86,6 +93,7 @@ void onInitEnd() {
 void onDraw() {
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT);
+	glUniformMatrix4fv(cam_translateID, 1, GL_TRUE, cam_translate_data);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -93,6 +101,22 @@ void onDraw() {
 }
 
 void onKeyboard(unsigned char c, int x, int y) {
+	
+	switch(c) {
+	case 'w':
+		cam_translate_data[7] += 0.1f;
+		break;
+	case 'a':
+		cam_translate_data[3] -= 0.1f;
+		break;
+	case 's':
+		cam_translate_data[7] -= 0.1f;
+		break;
+	case 'd':
+		cam_translate_data[3] += 0.1f;
+		break;
+	}
+
 	glutPostRedisplay();
 }
 

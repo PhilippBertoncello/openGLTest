@@ -28,7 +28,8 @@ namespace shaderCompiler {
 		glGetShaderInfoLog(out, _maxShaderCompilerLogLength, &length, log);
 
 		printf("Vertex Shader:   %s%s\n\n",
-			compileStatus ? "\e[32mCompilation Successful!\e[39m" : "\e[31mCompilation Failed!\e[34m\n    Compiler output:\n    ",
+			compileStatus ? "\e[32mCompilation Successful!\e[39m" :
+			"\e[31mCompilation Failed!\e[34m\n    Compiler output:\n    ",
 			compileStatus ? "" : log);
 
 		return out;
@@ -49,7 +50,8 @@ namespace shaderCompiler {
 
 
 		printf("Fragment Shader: %s%s%s\n\n",
-			compileStatus ? "\e[32mCompilation Successful!\e[39m" : "\e[31mCompilation Failed!\e[34m\n    Compiler output:\n    ",
+			compileStatus ? "\e[32mCompilation Successful!\e[39m" :
+			"\e[31mCompilation Failed!\e[34m\n    Compiler output:\n    ",
 			compileStatus ? "" : log,
 			"\e[39m");
 

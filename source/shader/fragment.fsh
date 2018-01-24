@@ -1,9 +1,7 @@
 #version 130
 
-flat in vec4 var_color;
-
-uniform vec2 windowSize;
+varying vec4 var_color;
 
 void main() {
-	gl_FragColor = var_color;
+	gl_FragColor = var_color;// vec4(1,0,0,1);
 }

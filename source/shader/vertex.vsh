@@ -3,7 +3,7 @@
 attribute vec4 in_position;
 attribute vec4 in_color;
 
-flat out vec4 var_color;
+varying vec4 var_color;
 
 void main() {
 	gl_Position = in_position;

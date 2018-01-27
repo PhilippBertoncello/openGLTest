@@ -1,10 +1,11 @@
 #include"stdio.h"
 #include"source/engine.cpp"
 
+//vertex data
 GLfloat vertexSource[] = {
 	-0.5, -0.5, 1,
 	0.5, -0.5, 1,
-	0, 0.5, 1
+	0, 0.5, 2
 };
 
 GLfloat colorSource[] = {
@@ -13,34 +14,41 @@ GLfloat colorSource[] = {
 	0.0f,0.0f,1.0f,1.0f
 };
 
-GLfloat cam_translate_data[16] = {
-	1,0,0,0,
-	0,1,0,0,
-	0,0,1,0,
-	0,0,0,1
-};
-
+//Vertex buffers
 GLuint vbo;
 GLuint vao = 0;
 
+//variable pointers
 GLuint positionID;
 GLuint colorID;
+GLuint matMVPID;
+GLuint matViewID;
+GLuint matProjectionID;
+GLuint clippingPlanesID;
 
+//shader variables
 GLuint shaderProgramID;
 
-GLuint cam_translateID;
+//transformation matrices
+glm::mat4 matMVP = glm::mat4(1.0f);
+glm::mat4 matModel = glm::mat4(1.0f);
+glm::mat4 matView = glm::mat4(1.0f);
+glm::mat4 matProjection = glm::mat4(1.0f);//perspective((30.0f), 1.0f, 0.1f, 10.0f);
 
+//window size
 GLuint windowWidth;
 GLuint windowHeight;
 
-
 int main(int argc, char** argv) {
-	initGLUT(argc, argv, "title", 480, 360);
+	initGLUT(argc, argv, "OpenGL-Test", 480, 360);
 	glutMainLoop();
 	return(0);
 }
 
 void onInitEnd() {
+	//matProjection = glm::ortho(2,2,2,2,0,10);
+	//matView = glm::translate(glm::mat4(1), glm::vec3(0,0,2));
+
 	//Get Glut variables
 	windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
@@ -70,7 +78,8 @@ void onInitEnd() {
 	//get location of variables
 	positionID = glGetAttribLocation(shaderProgramID, "in_position");
 	colorID = glGetAttribLocation(shaderProgramID, "in_color");
-	cam_translateID = glGetUniformLocation(shaderProgramID, "cam_translate");
+	matMVPID = glGetUniformLocation(shaderProgramID, "mat_mvp");
+	clippingPlanesID = glGetUniformLocation(shaderProgramID, "uni_clippingplane");
 
 	//set attributes to read from this buffer
 	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -80,7 +89,8 @@ void onInitEnd() {
 	glUseProgram(shaderProgramID);
 	
 	//set uniform variables
-	glUniformMatrix4fv(cam_translateID, 1, GL_TRUE, cam_translate_data);
+	glUniformMatrix4fv(matMVPID, 1, GL_FALSE, glm::value_ptr(matMVP));
+	glUniform2f(clippingPlanesID, 0.1f, 10.0f);
 
 	//Disable face culling
 	glDisable(GL_CULL_FACE);
@@ -91,9 +101,13 @@ void onInitEnd() {
 } 
 
 void onDraw() {
+	//calculate transformation matrices
+	matMVP = matProjection * matView * matModel;
+	glUniformMatrix4fv(matMVPID, 1, GL_TRUE, glm::value_ptr(matMVP));
+
+	//render
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glUniformMatrix4fv(cam_translateID, 1, GL_TRUE, cam_translate_data);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -101,19 +115,17 @@ void onDraw() {
 }
 
 void onKeyboard(unsigned char c, int x, int y) {
-	
 	switch(c) {
 	case 'w':
-		cam_translate_data[7] += 0.1f;
 		break;
 	case 'a':
-		cam_translate_data[3] -= 0.1f;
 		break;
 	case 's':
-		cam_translate_data[7] -= 0.1f;
 		break;
 	case 'd':
-		cam_translate_data[3] += 0.1f;
+		break;
+	case 'f':
+		matModel = glm::rotate(matModel, 0.2f, glm::vec3(0,1,0));
 		break;
 	}
 

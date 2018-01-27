@@ -1,17 +1,15 @@
-#include"vecmath.cpp"
+#include"math.h"
 #include"readfile.cpp"
 #include"GL/glut.h"
 #include"stdio.h"
+#include"glm/glm.hpp"
+#include"glm/gtc/type_ptr.hpp"
+#include"glm/gtc/matrix_transform.hpp"
+#include"object.cpp"
+
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-using namespace vector;
-
 GLuint _maxShaderCompilerLogLength = 512;
-
-struct vertex {
-	vec2f pos;
-	vec4f color;
-};
 
 namespace shaderCompiler {
 	GLuint makeVertexShader(const char* source) {
